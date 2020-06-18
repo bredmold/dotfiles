@@ -1,5 +1,8 @@
-# TODO fix mac-specific file location
-source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
+# Git tab-completion
+GIT_COMPLETION='/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash'
+if [ -f "$GIT_COMPLETION" ]; then
+  source "$GIT_COMPLETION"
+fi
 
 # Escape codes for prompting
 __WHO_ESC='\[\e[35m\]'
@@ -31,3 +34,8 @@ function __custom_prompt {
   export PS1="${__WHO_ESC}\u@\h ${__TIME_ESC}[\t] ${__WD_ESC}\w ${__GIT_BRANCH_INDICATOR}${__RESET_ESC}\n\$ "
 }
 export PROMPT_COMMAND='__custom_prompt'
+
+MVIM_DIR="/Applications/MacVim.app"
+if [ -d "$MVIM_DIR" ]; then
+  alias mvim="$MVIM_DIR/Contents/bin/mvim"
+fi
