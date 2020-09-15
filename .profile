@@ -35,7 +35,21 @@ function __custom_prompt {
 }
 export PROMPT_COMMAND='__custom_prompt'
 
-MVIM_DIR="/Applications/MacVim.app"
-if [ -d "$MVIM_DIR" ]; then
-  alias mvim="$MVIM_DIR/Contents/bin/mvim"
+if [ $(uname) = "Darwin" ]; then
+  # MacVim
+  MVIM_DIR="/Applications/MacVim.app"
+  if [ -d "$MVIM_DIR" ]; then
+    alias mvim="$MVIM_DIR/Contents/bin/mvim"
+  fi
+
+  # Select JVM
+  function jdk {
+    if [ "$1" = "8" ]; then
+      export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+    elif [ "$1" = "11" ]; then
+      export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+    else
+      echo "Unknown java version: $1"
+    fi
+  }
 fi
