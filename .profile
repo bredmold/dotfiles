@@ -30,12 +30,6 @@ else
   GIT_COMPLETION='/usr/share/bash-completion/bash_completion'
 fi
 
-# pyenv
-if [ -d "$HOME/.pyenv" ]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-fi
-
 # Git tab-completion
 if [ -f "$GIT_COMPLETION" ]; then
   source "$GIT_COMPLETION"
@@ -71,3 +65,11 @@ function __custom_prompt {
   export PS1="${__WHO_ESC}\u@\h ${__TIME_ESC}[\t] ${__WD_ESC}\w ${__GIT_BRANCH_INDICATOR}${__RESET_ESC}\n\$ "
 }
 export PROMPT_COMMAND='__custom_prompt'
+
+# pyenv
+if [ -d "$HOME/.pyenv" ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+
+  eval "$(pyenv init -)"
+fi
