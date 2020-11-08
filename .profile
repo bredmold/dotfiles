@@ -19,6 +19,8 @@ if [ $(uname) = "Darwin" ]; then
 elif [[ "$(uname -r)" == *microsoft* ]]; then
   GIT_COMPLETION='/usr/share/bash-completion/bash_completion'
 
+  eval $(ssh-agent)
+
   if [ "$DISPLAY" != "" ]; then
     export WSL_VERSION=$(wsl.exe -l -v | grep -a '[*]' | sed 's/[^0-9]*//g')
     export WSL_HOST=$(tail -1 /etc/resolv.conf | cut -d' ' -f2)
@@ -26,6 +28,12 @@ elif [[ "$(uname -r)" == *microsoft* ]]; then
   fi
 else
   GIT_COMPLETION='/usr/share/bash-completion/bash_completion'
+fi
+
+# pyenv
+if [ -d "$HOME/.pyenv" ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
 fi
 
 # Git tab-completion
