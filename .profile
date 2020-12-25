@@ -27,7 +27,29 @@ elif [[ "$(uname -r)" == *microsoft* ]]; then
     export DISPLAY=$WSL_HOST:0
   fi
 else
+  # Assume a Linux/Unix environment
   GIT_COMPLETION='/usr/share/bash-completion/bash_completion'
+
+  # Locate and run an SSH agent
+  function __run_ssh_agent {
+    if [ ! -f "$SSH_AUTH_SOCK" ]; then
+      # Try and locate an already-running agent
+      for __socket in "$(find /tmp -type s -user $(whoami) -perm 600 -name 'agent.*' 2> /dev/null)"; do
+        local __agent_pid=$(echo "$__socket" | cut -d . -f 2)
+        if kill -0 "$__agent_pid" 2> /dev/null; then
+          echo "Found agent $__agent_pid"
+          export SSH_AUTH_SOCK="$__agent_pid"
+          break
+        fi
+      done
+
+      if [ ! -f "$SSH_AUTH_SOCK" ]; then
+        eval $(ssh-agent)
+      fi
+    fi
+  }
+
+  __run_ssh_agent
 fi
 
 # Git tab-completion
