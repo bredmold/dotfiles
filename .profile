@@ -32,19 +32,23 @@ else
 
   # Locate and run an SSH agent
   function __run_ssh_agent {
-    if [ ! -f "$SSH_AUTH_SOCK" ]; then
-      # Try and locate an already-running agent
-      for __socket in "$(find /tmp -type s -user $(whoami) -perm 600 -name 'agent.*' 2> /dev/null)"; do
-        local __agent_pid=$(echo "$__socket" | cut -d . -f 2)
-        if kill -0 "$__agent_pid" 2> /dev/null; then
-          echo "Found agent $__agent_pid"
-          export SSH_AUTH_SOCK="$__agent_pid"
-          break
+    if [ ! -S "$SSH_AUTH_SOCK" ]; then
+      local __agent_file="$HOME/.ssh/agent"
+      local __checked=$(find "$__agent_file" -perm 600 2> /dev/null)
+      if [ "$__checked" != "" ]; then
+        local __auth_socket=$(cut -d : -f 1 < "$__agent_file")
+        local __auth_pid=$(cut -d : -f 2 < "$__agent_file")
+        if [ -S "$__auth_socket" ] && kill -0 "$__auth_pid" 2> /dev/null; then
+          echo "Found Agent $__auth_pid"
+          export SSH_AUTH_SOCK="$__auth_socket"
         fi
-      done
+      fi
 
-      if [ ! -f "$SSH_AUTH_SOCK" ]; then
+      if [ ! -S "$SSH_AUTH_SOCK" ]; then
         eval $(ssh-agent)
+
+        echo "${SSH_AUTH_SOCK}:${SSH_AGENT_PID}" > $__agent_file
+        chmod 600 "$__agent_file"
       fi
     fi
   }

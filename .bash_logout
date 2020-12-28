@@ -1,3 +1,4 @@
 if [ "$SSH_AGENT_PID" != "" ]; then
-  ssh-agent -k
+  eval $(ssh-agent -k)
+  rm -f "$HOME/.ssh/agent"
 fi
