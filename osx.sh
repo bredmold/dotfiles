@@ -15,3 +15,4 @@ function jdk {
   fi
 }
 GIT_COMPLETION='/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash'
+alias ls='ls -GF'
