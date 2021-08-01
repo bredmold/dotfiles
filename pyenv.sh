@@ -1,7 +1,7 @@
 # pyenv
 if [ -d "$HOME/.pyenv" ]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  __prepend_path "$PYENV_ROOT/bin"
+  __prepend_path "$HOME/.pyenv/bin"
 
+  eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
 fi
