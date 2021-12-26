@@ -13,12 +13,13 @@ __RESET_ESC='\[\e[0m\]'
 # Determine the branch name
 function __git_branch_name {
   local GIT_WD=$(pwd)
+  local DOT_GIT
 
   while [ "$GIT_WD" != "/" ]; do
     DOT_GIT="$GIT_WD/.git"
 
     if [ -d "$DOT_GIT" ]; then
-      __GIT_BRANCH_INDICATOR="${__BRANCH_ESC}($(git rev-parse --abbrev-ref HEAD))"
+      __GIT_BRANCH_INDICATOR="${__BRANCH_ESC}($(git rev-parse --abbrev-ref HEAD 2> /dev/null))"
       return
     fi
 
