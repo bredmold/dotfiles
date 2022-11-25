@@ -29,6 +29,7 @@ if [ -d "$1" ]; then
 
   __read_rc_file "$1/git.sh"
   __read_rc_file "$1/pyenv.sh"
+  __read_rc_file "$1/sshagent.sh"
 
   __prepend_path "$HOME/.npm-global/bin"
   __prepend_path "$HOME/bin"
