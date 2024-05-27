@@ -8,6 +8,27 @@ function __read_rc_file {
   fi
 }
 
+function __mkdir {
+  local path="$1"
+
+  if [ ! -d "$path" ]; then
+    mkdir -p "$path"
+  fi
+}
+
+function __prepend_path_var {
+  local entry="$1"
+  local var="$2"
+  local path_value=$(eval "echo -n \$$var")
+
+  echo "$var=[$path_value]"
+  if [ -d "$entry" ] && [ "$path_value" = "" ]; then
+    eval "export $var=\"$entry\""
+  elif [ -d "$entry" ] && ! echo "$path_value" | tr : $'\n' | grep "$entry" > /dev/null; then
+    eval "export $var=\"$entry:$path_value\""
+  fi
+}
+
 function __prepend_path {
   local entry="$1"
 
@@ -15,6 +36,17 @@ function __prepend_path {
     if ! echo "$PATH" | tr : $'\n' | grep "$entry" > /dev/null; then
       export PATH="$entry:$PATH"
     fi
+  fi
+}
+
+function __rcfile_line {
+  local path="$1"
+
+  shift
+  local line="$*"
+
+  if [ ! -f "$path" ] || ! grep "$line" "$path" > /dev/null; then
+    echo "$line" >> "$path"
   fi
 }
 
