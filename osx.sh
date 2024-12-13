@@ -19,5 +19,5 @@ function jdk {
 GIT_COMPLETION='/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash'
 alias ls='ls -GF'
 
-# HomeBrew
 __prepend_path "/opt/homebrew/bin"
+__prepend_path "$HOME/Library/Application Support/Coursier/bin"
